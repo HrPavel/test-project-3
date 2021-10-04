@@ -1,0 +1,27 @@
+version: '3'
+services:
+  task-db:
+    container_name: task-db
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+
+    environment:
+      - POSTGRES_PASSWORD=user
+      - POSTGRES_USER=user
+      - POSTGRES_DB=task-db
+  task-backend:
+    container_name: task-backend
+    build: task-backend/
+    ports:
+      - "8080:8080"
+    env_file:
+      - task-backend/.env
+    depends_on:
+      - task-db
+  task-frontend:
+    container_name: task-frontend
+    build: task-frontend/
+    ports:
+      - "8081:80"
